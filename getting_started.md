@@ -18,7 +18,8 @@ virtualenv env
 3) Activate the virtual environment:
 
 ```
-source env/bin/activate
+source env/bin/activate   #mac
+.\env\Scripts\activate    #windows
 ```
 
 4) Now you can install packages using pip and they will be installed in the virtual environment, not globally:
