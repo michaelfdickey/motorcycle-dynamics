@@ -13,6 +13,8 @@ BLACK = (0, 0, 0)
 LIGHT_BLUE = (173, 216, 230)  # Added color for clicked button
 RED = (255, 0, 0)  # Added color for EXIT label and border
 SOFT_YELLOW = (255, 247, 200)  # Adjusted soft yellow color for navigation bars
+MEDIUM_YELLOW = (255, 255, 102)  # Added medium yellow color for buttons
+
 
 # Set background color
 screen.fill(BLACK)  # Confirmed BLACK as the main background color
@@ -21,11 +23,12 @@ screen.fill(BLACK)  # Confirmed BLACK as the main background color
 pygame.draw.rect(screen, SOFT_YELLOW, pygame.Rect(0, 0, 100, 800))  # Adjusted to 100 pixels wide and full height
 
 # Draw the main navigation bar across the top
-pygame.draw.rect(screen, SOFT_YELLOW, pygame.Rect(0, 0, 1200, 20))  # Added main navigation bar in soft yellow
+pygame.draw.rect(screen, MEDIUM_YELLOW, pygame.Rect(0, 0, 1200, 20))  # Added main navigation bar in soft yellow
 
 # Draw a red border around the exit button area persistently
 pygame.draw.rect(screen, LIGHT_BLUE, pygame.Rect(0, 780, 100, 20), 2)  # Adjusted to 100 pixels wide
-font = pygame.font.Font(None, 22)  # Decreased font size to 24
+#font = pygame.font.Font(None, 22)  # Decreased font size to 24
+font = pygame.font.SysFont('Arial', 16)  # Changed font to Arial
 
 # Render the exit button text persistently
 text = font.render('EXIT', True, BLACK, None)  # Added RED background for the EXIT label
