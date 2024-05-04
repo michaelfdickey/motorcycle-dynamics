@@ -24,10 +24,11 @@ pygame.draw.rect(screen, SOFT_YELLOW, pygame.Rect(0, 0, 100, 800))  # Adjusted t
 pygame.draw.rect(screen, SOFT_YELLOW, pygame.Rect(0, 0, 1200, 20))  # Added main navigation bar in soft yellow
 
 # Draw a red border around the exit button area persistently
-pygame.draw.rect(screen, RED, pygame.Rect(0, 780, 100, 20), 2)  # Adjusted to 100 pixels wide
-font = pygame.font.Font(None, 24)  # Decreased font size to 24
+pygame.draw.rect(screen, LIGHT_BLUE, pygame.Rect(0, 780, 100, 20), 2)  # Adjusted to 100 pixels wide
+font = pygame.font.Font(None, 22)  # Decreased font size to 24
+
 # Render the exit button text persistently
-text = font.render('EXIT', True, LIGHT_BLUE, RED)  # Added RED background for the EXIT label
+text = font.render('EXIT', True, BLACK, None)  # Added RED background for the EXIT label
 screen.blit(text, (10, 782))  # Adjusted text position to match the resized button
 
 # Main loop
