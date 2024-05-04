@@ -38,7 +38,7 @@ selected_button = None
 
 # Draw the 'Create' button
 def draw_create_button(highlighted):
-    color = SOFT_YELLOW if highlighted else SOFT_YELLOW
+    color = SOFT_ORANGE if highlighted else SOFT_YELLOW
     pygame.draw.rect(screen, color, pygame.Rect(0, 20, 100, 20))
     text = font.render('CREATE', True, BLACK, None)
     screen.blit(text, (10, 22))
