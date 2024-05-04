@@ -22,6 +22,18 @@ source env/bin/activate   #mac
 .\env\Scripts\activate    #windows
 ```
 
+3b) Powershell restricts the scripts, you need to set the policy each time you start the virtual env:
+
+```
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+and after you are done, set it back:
+
+```
+Set-ExecutionPolicy -ExecutionPolicy Restricted -Scope CurrentUser
+```
+
 4) Now you can install packages using pip and they will be installed in the virtual environment, not globally:
 
 ```
