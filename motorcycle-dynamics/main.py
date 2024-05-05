@@ -45,13 +45,13 @@ def draw_create_button(highlighted):
 
 # Draw additional buttons
 def draw_additional_buttons():
-    buttons = ["NODE", "BEAM", "FIXTURE", "FORCE", "TORQUE"]
+    buttons = ["Node", "Beam", "Fixture", "Force", "Torque"]
     y_pos = 40
     for button in buttons:
         color = SOFT_ORANGE if selected_button == button else SOFT_YELLOW
-        if button in ["NODE", "BEAM"]:
-            width = 50 if button == "NODE" else 50
-            x_pos = 0 if button == "NODE" else 50
+        if button in ["Node", "Beam"]:
+            width = 50 if button == "Node" else 50
+            x_pos = 0 if button == "Node" else 50
         else:
             width = 100
             x_pos = 0
