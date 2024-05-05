@@ -25,7 +25,7 @@ pygame.draw.rect(screen, SOFT_YELLOW, pygame.Rect(0, 0, 100, 800))  # Adjusted t
 pygame.draw.rect(screen, SOFT_YELLOW, pygame.Rect(0, 0, 1200, 20))  # Updated main navigation bar to soft yellow
 
 # Draw a red border around the exit button area persistently
-pygame.draw.rect(screen, LIGHT_BLUE, pygame.Rect(0, 780, 100, 20), 2)  # Adjusted to 100 pixels wide
+pygame.draw.rect(screen, RED, pygame.Rect(0, 780, 100, 20), 2)  # Adjusted to 100 pixels wide, added border style to match EXIT
 font = pygame.font.SysFont('Arial', 16)  # Changed font to Arial
 
 # Render the exit button text persistently
@@ -36,14 +36,15 @@ screen.blit(text, (10, 782))  # Adjusted text position to match the resized butt
 create_button_highlighted = False
 selected_button = None
 
-# Draw the 'Create' button
+# Draw the 'Create' button with border matching EXIT button's style
 def draw_create_button(highlighted):
     color = SOFT_ORANGE if highlighted else SOFT_YELLOW
     pygame.draw.rect(screen, color, pygame.Rect(0, 20, 100, 20))
+    pygame.draw.rect(screen, RED, pygame.Rect(0, 20, 100, 20), 2)  # Added border style to match EXIT
     text = font.render('CREATE', True, BLACK, None)
     screen.blit(text, (10, 22))
 
-# Draw additional buttons
+# Draw additional buttons with border matching EXIT button's style for 'Node' button
 def draw_additional_buttons():
     buttons = ["Node", "Beam", "Fixture", "Force", "Torque"]
     y_pos = 40
@@ -56,6 +57,8 @@ def draw_additional_buttons():
             width = 100
             x_pos = 0
         pygame.draw.rect(screen, color, pygame.Rect(x_pos, y_pos, width, 20))
+        if button == "Node":  # Added border style to match EXIT for 'Node' button
+            pygame.draw.rect(screen, RED, pygame.Rect(x_pos, y_pos, width, 20), 2)
         text = font.render(button, True, BLACK, None)
         screen.blit(text, (x_pos + 10, y_pos + 2))
         y_pos += 20
@@ -74,7 +77,7 @@ while running:
             # Toggle 'Create' button highlight
             if 0 <= x <= 100 and 20 <= y <= 40:
                 create_button_highlighted = not create_button_highlighted
-                selected_button = None if create_button_highlighted else selected_button
+                selected_button = None if not create_button_highlighted else selected_button  # Updated logic to unhighlight 'Node' if 'Create' is unhighlighted
                 draw_create_button(create_button_highlighted)
                 draw_additional_buttons()
             # Check if the exit button is clicked
