@@ -14,7 +14,6 @@ LIGHT_BLUE = (173, 216, 230)  # Added color for clicked button
 RED = (255, 0, 0)  # Added color for EXIT label and border
 SOFT_YELLOW = (255, 247, 200)  # Adjusted soft yellow color for navigation bars
 SOFT_ORANGE = (255, 165, 0)  # Defined soft orange color for button highlight
-SOFT_BLUE = (135, 206, 235)  # Defined soft blue color for button border
 
 # Set background color
 screen.fill(BLACK)  # Confirmed BLACK as the main background color
@@ -26,7 +25,7 @@ pygame.draw.rect(screen, SOFT_YELLOW, pygame.Rect(0, 0, 100, 800))  # Adjusted t
 pygame.draw.rect(screen, SOFT_YELLOW, pygame.Rect(0, 0, 1200, 20))  # Updated main navigation bar to soft yellow
 
 # Draw a red border around the exit button area persistently
-pygame.draw.rect(screen, RED, pygame.Rect(0, 780, 100, 20), 2)  # Adjusted to 100 pixels wide, added border style to match EXIT
+pygame.draw.rect(screen, LIGHT_BLUE, pygame.Rect(0, 780, 100, 20), 2)  # Adjusted to 100 pixels wide
 font = pygame.font.SysFont('Arial', 16)  # Changed font to Arial
 
 # Render the exit button text persistently
@@ -37,30 +36,26 @@ screen.blit(text, (10, 782))  # Adjusted text position to match the resized butt
 create_button_highlighted = False
 selected_button = None
 
-# Draw the 'Create' button with border matching EXIT button's style
+# Draw the 'Create' button
 def draw_create_button(highlighted):
     color = SOFT_ORANGE if highlighted else SOFT_YELLOW
-    border_color = SOFT_BLUE if highlighted else RED  # Updated border color to SOFT_BLUE when highlighted
     pygame.draw.rect(screen, color, pygame.Rect(0, 20, 100, 20))
-    pygame.draw.rect(screen, border_color, pygame.Rect(0, 20, 100, 20), 2)  # Updated border style to SOFT_BLUE when highlighted
     text = font.render('CREATE', True, BLACK, None)
     screen.blit(text, (10, 22))
 
-# Draw additional buttons with border matching EXIT button's style for 'Node' button
+# Draw additional buttons
 def draw_additional_buttons():
     buttons = ["Node", "Beam", "Fixture", "Force", "Torque"]
     y_pos = 40
     for button in buttons:
         color = SOFT_ORANGE if selected_button == button else SOFT_YELLOW
-        border_color = SOFT_BLUE if selected_button == button else RED  # Updated border color to SOFT_BLUE when highlighted
         if button in ["Node", "Beam"]:
-            width = 50 if button == "Node" else 50
-            x_pos = 0 if button == "Node" else 50
+            width = 50 if button == "NODE" else 50
+            x_pos = 0 if button == "NODE" else 50
         else:
             width = 100
             x_pos = 0
         pygame.draw.rect(screen, color, pygame.Rect(x_pos, y_pos, width, 20))
-        pygame.draw.rect(screen, border_color, pygame.Rect(x_pos, y_pos, width, 20), 2)  # Updated border style to SOFT_BLUE when highlighted
         text = font.render(button, True, BLACK, None)
         screen.blit(text, (x_pos + 10, y_pos + 2))
         y_pos += 20
@@ -79,7 +74,7 @@ while running:
             # Toggle 'Create' button highlight
             if 0 <= x <= 100 and 20 <= y <= 40:
                 create_button_highlighted = not create_button_highlighted
-                selected_button = None if not create_button_highlighted else selected_button  # Updated logic to unhighlight 'Node' if 'Create' is unhighlighted
+                selected_button = None if create_button_highlighted else selected_button
                 draw_create_button(create_button_highlighted)
                 draw_additional_buttons()
             # Check if the exit button is clicked
