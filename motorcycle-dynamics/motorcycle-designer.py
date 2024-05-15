@@ -90,7 +90,7 @@ def main():
 
     running = True
     while running:
-        screen.fill(WHITE)
+        screen.fill(BLACK)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
