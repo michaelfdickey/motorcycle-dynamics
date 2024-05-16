@@ -6,6 +6,7 @@ from create_mass import handle_mass_click, draw_masses
 from grid import draw_grids
 from ui_handling import draw_ui, handle_button_click, handle_checkbox_click, handle_keydown_event, mass_input_active, input_text
 import config
+from config import FOOT_GRID_SIZE, INCH_GRID_SIZE  # Import the necessary constants
 from ui_buttons import highlighted, checkbox_states
 
 nodes = []
@@ -38,7 +39,14 @@ def main(screen):
                         else:
                             mass_input_active = False
                 else:
-                    handle_node_click(mouse_pos, nodes, highlighted)
+                    snap_to_grid = checkbox_states["snap"]
+                    if checkbox_states["1in"]:
+                        grid_size = INCH_GRID_SIZE
+                    elif checkbox_states["1ft"]:
+                        grid_size = FOOT_GRID_SIZE
+                    else:
+                        grid_size = None  # No grid snapping
+                    handle_node_click(mouse_pos, nodes, highlighted, snap_to_grid, grid_size)
                     beam_start_node = handle_beam_click(mouse_pos, nodes, beams, highlighted, beam_start_node)
                     handle_fixture_click(mouse_pos, nodes, fixtures, highlighted)
                     handle_mass_click(mouse_pos, nodes, masses, highlighted, mass_value)
