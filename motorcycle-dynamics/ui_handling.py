@@ -82,45 +82,37 @@ def draw_ui(screen, nodes, beams):
     tally_surface = small_font.render(tally_text, True, (255, 0, 0))
     screen.blit(tally_surface, (config.SCREEN_WIDTH - tally_surface.get_width() - 10, config.SCREEN_HEIGHT - tally_surface.get_height() - 10))
 
-def draw_confirmation_prompt(screen, title, confirmation_text, callback):
-    print("Drawing confirmation prompt")
-    font = config.font
-    prompt_width, prompt_height = 300, 200
-    prompt_rect = pygame.Rect((config.SCREEN_WIDTH - prompt_width) // 2, (config.SCREEN_HEIGHT - prompt_height) // 2, prompt_width, prompt_height)
-    
-    pygame.draw.rect(screen, config.SOFT_YELLOW, prompt_rect)
-    pygame.draw.rect(screen, config.BLACK, prompt_rect, 2)
-    
-    title_surface = font.render(title, True, config.BLACK)
-    screen.blit(title_surface, (prompt_rect.x + (prompt_width - title_surface.get_width()) // 2, prompt_rect.y + 20))
-    
-    confirmation_surface = font.render(confirmation_text, True, config.BLACK)
-    screen.blit(confirmation_surface, (prompt_rect.x + (prompt_width - confirmation_surface.get_width()) // 2, prompt_rect.y + 60))
-    
-    yes_button = pygame.Rect(prompt_rect.x + 50, prompt_rect.y + 120, 80, 30)
-    cancel_button = pygame.Rect(prompt_rect.x + 170, prompt_rect.y + 120, 80, 30)
-    
-    pygame.draw.rect(screen, config.WHITE, yes_button)
-    pygame.draw.rect(screen, config.BLACK, yes_button, 2)
-    pygame.draw.rect(screen, config.WHITE, cancel_button)
-    pygame.draw.rect(screen, config.BLACK, cancel_button, 2)
-    
-    yes_surface = font.render("Yes", True, config.BLACK)
-    screen.blit(yes_surface, (yes_button.x + (yes_button.width - yes_surface.get_width()) // 2, yes_button.y + 5))
-    
-    cancel_surface = font.render("Cancel", True, config.BLACK)
-    screen.blit(cancel_surface, (cancel_button.x + (cancel_button.width - cancel_surface.get_width()) // 2, cancel_button.y + 5))
-    
-    return prompt_rect, yes_button, cancel_button
+    if confirmation_active:
+        draw_confirmation_prompt_in_ui_bar(screen)
 
-def handle_confirmation_click(mouse_pos, prompt_rect, yes_button, cancel_button, callback):
+def draw_confirmation_prompt_in_ui_bar(screen):
+    font = config.small_font
+    text = "Do you want to clear all entities?"
+    yes_rect = pygame.Rect(10, buttons["clear"].bottom + 20, 50, 30)
+    no_rect = pygame.Rect(70, buttons["clear"].bottom + 20, 50, 30)
+
+    text_surface = font.render(text, True, config.BLACK)
+    screen.blit(text_surface, (10, buttons["clear"].bottom + 5))
+
+    pygame.draw.rect(screen, config.WHITE, yes_rect)
+    pygame.draw.rect(screen, config.BLACK, yes_rect, 2)
+    pygame.draw.rect(screen, config.WHITE, no_rect)
+    pygame.draw.rect(screen, config.BLACK, no_rect, 2)
+
+    yes_surface = font.render("Yes", True, config.BLACK)
+    no_surface = font.render("No", True, config.BLACK)
+
+    screen.blit(yes_surface, (yes_rect.x + (yes_rect.width - yes_surface.get_width()) // 2, yes_rect.y + 5))
+    screen.blit(no_surface, (no_rect.x + (no_rect.width - no_surface.get_width()) // 2, no_rect.y + 5))
+
+    return yes_rect, no_rect
+
+def handle_confirmation_click_in_ui_bar(mouse_pos, yes_rect, no_rect, clear_all_callback):
     global confirmation_active
-    if yes_button.collidepoint(mouse_pos):
+    if yes_rect.collidepoint(mouse_pos):
         print("Yes button clicked")
-        callback()
+        clear_all_callback()
         confirmation_active = False
-    elif cancel_button.collidepoint(mouse_pos):
-        print("Cancel button clicked")
-        confirmation_active = False
-    elif not prompt_rect.collidepoint(mouse_pos):
+    elif no_rect.collidepoint(mouse_pos):
+        print("No button clicked")
         confirmation_active = False
