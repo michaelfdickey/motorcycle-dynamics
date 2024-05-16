@@ -139,18 +139,16 @@ def handle_button_click(mouse_pos):
                     selected_button_group = None
             elif key in ["node", "beam", "fixture", "force", "torque", "mass"]:
                 if selected_button_group == "create":
-                    # Unhighlight other create options
-                    for other_key in ["node", "beam", "fixture", "force", "torque", "mass"]:
-                        if other_key != key:
-                            highlighted[other_key] = False
                     highlighted[key] = not highlighted[key]
+                    # Ensure that when 'Create' is selected, all 'Edit' related highlights are reset to `False`
+                    for edit_key in ["delete", "move", "modify", "clear"]:
+                        highlighted[edit_key] = False
             elif key in ["delete", "move", "modify", "clear"]:
                 if selected_button_group == "edit":
-                    # Unhighlight other edit options
-                    for other_key in ["delete", "move", "modify", "clear"]:
-                        if other_key != key:
-                            highlighted[other_key] = False
                     highlighted[key] = not highlighted[key]
+                    # Ensure that when 'Edit' is selected, all 'Create' related highlights are reset to `False`
+                    for create_key in ["node", "beam", "fixture", "force", "torque", "mass"]:
+                        highlighted[create_key] = False
             return
 
 def handle_checkbox_click(mouse_pos):
