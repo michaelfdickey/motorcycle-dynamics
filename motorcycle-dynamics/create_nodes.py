@@ -1,3 +1,5 @@
+# create_nodes.py
+
 import pygame
 import config
 
@@ -24,10 +26,27 @@ def handle_fixture_click(mouse_pos, nodes, fixtures, highlighted):
 
 def draw_fixtures(screen, fixtures):
     for fixture in fixtures:
-        fixture_rect = pygame.Rect(fixture[0] - 10, fixture[1] - 10, 20, 20)
-        pygame.draw.rect(screen, config.BLUE, fixture_rect, 3)
-        pygame.draw.line(screen, config.BLUE, (fixture[0] - 10, fixture[1] - 10), (fixture[0] + 10, fixture[1] + 10), 3)
-        pygame.draw.line(screen, config.BLUE, (fixture[0] + 10, fixture[1] - 10), (fixture[0] - 10, fixture[1] + 10), 3)
+        fixture_size = 30  # Size of the fixture symbol
+        line_thickness = 3  # Thickness of the lines
+        triangle_height = fixture_size
+        triangle_base_half = fixture_size  # Make the triangle wider
+        node_x, node_y = fixture
+
+        # Draw the triangle below the node
+        triangle_points = [
+            (node_x, node_y),  # Top point (at the node)
+            (node_x - triangle_base_half, node_y + triangle_height),  # Bottom-left point
+            (node_x + triangle_base_half, node_y + triangle_height)   # Bottom-right point
+        ]
+        pygame.draw.polygon(screen, config.BLUE, triangle_points, line_thickness)
+
+        # Draw the comb-like teeth
+        num_teeth = 5
+        tooth_height = 5
+        tooth_spacing = 2 * triangle_base_half / (num_teeth + 1)
+        for i in range(1, num_teeth + 1):
+            tooth_x = node_x - triangle_base_half + i * tooth_spacing
+            pygame.draw.line(screen, config.BLUE, (tooth_x, node_y + triangle_height), (tooth_x, node_y + triangle_height + tooth_height), line_thickness)
 
 def handle_node_deletion(mouse_pos, nodes):
     for node in nodes:
@@ -35,4 +54,5 @@ def handle_node_deletion(mouse_pos, nodes):
             node[1] - config.NODE_RADIUS <= mouse_pos[1] <= node[1] + config.NODE_RADIUS
         ):
             nodes.remove(node)
-            break
+            return True
+    return False
