@@ -38,3 +38,13 @@ def draw_masses(screen, masses):
         value_surface = font.render(str(value), True, config.RED)
         value_rect = value_surface.get_rect(center=(node_x, node_y + trapezoid_height - (trapezoid_height // 2) / 2))
         screen.blit(value_surface, value_rect)
+
+def handle_mass_deletion(mouse_pos, masses):
+    for mass in masses:
+        node, _ = mass
+        mass_size = 47  # Should match the size used in draw_masses
+        if (node[0] - mass_size // 2 <= mouse_pos[0] <= node[0] + mass_size // 2) and (
+            node[1] <= mouse_pos[1] <= node[1] + mass_size):
+            masses.remove(mass)
+            return True
+    return False

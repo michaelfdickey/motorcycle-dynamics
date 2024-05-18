@@ -4,7 +4,7 @@ import pygame
 import sys
 from create_nodes import handle_node_click, draw_nodes, handle_fixture_click, draw_fixtures, handle_node_deletion, handle_fixture_deletion
 from create_beams import handle_beam_click, draw_beams, handle_beam_deletion
-from create_mass import handle_mass_click, draw_masses
+from create_mass import handle_mass_click, draw_masses, handle_mass_deletion
 from grid import draw_grids
 from ui_handling import draw_ui, handle_button_click, handle_checkbox_click, handle_keydown_event, mass_input_active, input_text, draw_confirmation_prompt_in_ui_bar, handle_confirmation_click_in_ui_bar
 import config
@@ -68,9 +68,10 @@ def main(screen):
                             handle_fixture_click(mouse_pos, nodes, fixtures, highlighted)
                             handle_mass_click(mouse_pos, nodes, masses, highlighted, mass_value)
                         elif highlighted["edit"] and highlighted["delete"]:
-                            if not handle_fixture_deletion(mouse_pos, fixtures):
-                                if not handle_node_deletion(mouse_pos, nodes):
-                                    handle_beam_deletion(mouse_pos, beams)
+                            if not handle_mass_deletion(mouse_pos, masses):
+                                if not handle_fixture_deletion(mouse_pos, fixtures):
+                                    if not handle_node_deletion(mouse_pos, nodes):
+                                        handle_beam_deletion(mouse_pos, beams)
             elif event.type == pygame.KEYDOWN and mass_input_active:
                 handle_keydown_event(event)
 
