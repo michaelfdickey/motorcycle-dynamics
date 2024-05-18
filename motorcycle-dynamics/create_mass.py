@@ -1,42 +1,40 @@
+# create_mass.py
+
 import pygame
-
-RED = (255, 0, 0)
-NODE_RADIUS = 5
-
-def draw_mass(screen, node, mass_value):
-    """Draw a mass symbol hanging below the node with the specified mass value."""
-    x, y = node
-    trapezoid_height = 20
-    trapezoid_width_top = 20
-    trapezoid_width_bottom = 30
-
-    # Draw the trapezoid
-    points = [
-        (x - trapezoid_width_top // 2, y + trapezoid_height),
-        (x + trapezoid_width_top // 2, y + trapezoid_height),
-        (x + trapezoid_width_bottom // 2, y + 2 * trapezoid_height),
-        (x - trapezoid_width_bottom // 2, y + 2 * trapezoid_height)
-    ]
-    pygame.draw.polygon(screen, RED, points, 2)
-
-    # Draw the hanging line into the node
-    pygame.draw.line(screen, RED, (x, y), (x, y + trapezoid_height), 2)
-
-    # Draw the mass value inside the trapezoid
-    font = pygame.font.SysFont(None, 18)
-    label = font.render(f"{mass_value}", True, RED)
-    label_rect = label.get_rect(center=(x, y + 1.5 * trapezoid_height))
-    screen.blit(label, label_rect)
+import config
 
 def handle_mass_click(mouse_pos, nodes, masses, highlighted, mass_value):
-    """Handle mass-related clicks."""
     if highlighted["create"] and highlighted["mass"]:
         for node in nodes:
-            if (node[0] - NODE_RADIUS <= mouse_pos[0] <= node[0] + NODE_RADIUS) and (node[1] - NODE_RADIUS <= mouse_pos[1] <= node[1] + NODE_RADIUS):
+            if (node[0] - config.NODE_RADIUS <= mouse_pos[0] <= node[0] + config.NODE_RADIUS) and (
+                node[1] - config.NODE_RADIUS <= mouse_pos[1] <= node[1] + config.NODE_RADIUS
+            ):
                 masses.append((node, mass_value))
-                return
 
 def draw_masses(screen, masses):
-    """Draw all masses on the screen."""
     for mass in masses:
-        draw_mass(screen, mass[0], mass[1])
+        node, value = mass
+        mass_size = 47  # Increase the size by another 30% (36 * 1.3 = 46.8)
+        line_thickness = 3
+        trapezoid_height = mass_size
+        trapezoid_base_top = mass_size // 2
+        trapezoid_base_bottom = mass_size
+        node_x, node_y = node
+
+        # Draw the trapezoid below the node
+        trapezoid_points = [
+            (node_x - trapezoid_base_bottom // 2, node_y + trapezoid_height),  # Bottom-left point
+            (node_x + trapezoid_base_bottom // 2, node_y + trapezoid_height),  # Bottom-right point
+            (node_x + trapezoid_base_top // 2, node_y + trapezoid_height - (trapezoid_height // 2)),  # Top-right point
+            (node_x - trapezoid_base_top // 2, node_y + trapezoid_height - (trapezoid_height // 2))  # Top-left point
+        ]
+        pygame.draw.polygon(screen, config.RED, trapezoid_points, line_thickness)
+
+        # Draw the vertical line connecting the node to the trapezoid
+        pygame.draw.line(screen, config.RED, node, (node_x, node_y + trapezoid_height - (trapezoid_height // 2)), line_thickness)
+
+        # Draw the mass value inside the trapezoid
+        font = config.font
+        value_surface = font.render(str(value), True, config.RED)
+        value_rect = value_surface.get_rect(center=(node_x, node_y + trapezoid_height - (trapezoid_height // 2) / 2))
+        screen.blit(value_surface, value_rect)
