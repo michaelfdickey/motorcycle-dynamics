@@ -48,6 +48,15 @@ def draw_fixtures(screen, fixtures):
             tooth_x = node_x - triangle_base_half + i * tooth_spacing
             pygame.draw.line(screen, config.BLUE, (tooth_x, node_y + triangle_height), (tooth_x, node_y + triangle_height + tooth_height), line_thickness)
 
+def handle_fixture_deletion(mouse_pos, fixtures):
+    for fixture in fixtures:
+        fixture_size = 30  # Should match the size used in draw_fixtures
+        if (fixture[0] - fixture_size // 2 <= mouse_pos[0] <= fixture[0] + fixture_size // 2) and (
+            fixture[1] <= mouse_pos[1] <= fixture[1] + fixture_size):
+            fixtures.remove(fixture)
+            return True
+    return False
+
 def handle_node_deletion(mouse_pos, nodes):
     for node in nodes:
         if (node[0] - config.NODE_RADIUS <= mouse_pos[0] <= node[0] + config.NODE_RADIUS) and (
