@@ -29,10 +29,10 @@ buttons = {
     "torque": pygame.Rect(10, 25 + 3 * (BUTTON_HEIGHT + BUTTON_SPACING), BUTTON_WIDTH, BUTTON_HEIGHT),
     "mass": pygame.Rect(80, 25 + 3 * (BUTTON_HEIGHT + BUTTON_SPACING), BUTTON_WIDTH, BUTTON_HEIGHT),
     "edit": pygame.Rect(10, 160 + 4 * (BUTTON_HEIGHT + BUTTON_SPACING), UI_BAR_WIDTH - 20, BUTTON_HEIGHT),  # Edit group header button
-    "delete_nodes": pygame.Rect(20, 165 + 5 * (BUTTON_HEIGHT + BUTTON_SPACING), BUTTON_WIDTH, BUTTON_HEIGHT),
-    "delete_beams": pygame.Rect(20, 165 + 6 * (BUTTON_HEIGHT + BUTTON_SPACING), BUTTON_WIDTH, BUTTON_HEIGHT),
-    "delete_fixtures": pygame.Rect(20, 165 + 7 * (BUTTON_HEIGHT + BUTTON_SPACING), BUTTON_WIDTH, BUTTON_HEIGHT),
-    "delete_weights": pygame.Rect(20, 165 + 8 * (BUTTON_HEIGHT + BUTTON_SPACING), BUTTON_WIDTH, BUTTON_HEIGHT),
+    "delete": pygame.Rect(10, 165 + 5 * (BUTTON_HEIGHT + BUTTON_SPACING), BUTTON_WIDTH, BUTTON_HEIGHT),
+    "move": pygame.Rect(80, 165 + 5 * (BUTTON_HEIGHT + BUTTON_SPACING), BUTTON_WIDTH, BUTTON_HEIGHT),
+    "modify": pygame.Rect(10, 165 + 6 * (BUTTON_HEIGHT + BUTTON_SPACING), BUTTON_WIDTH, BUTTON_HEIGHT),
+    "clear": pygame.Rect(80, 165 + 6 * (BUTTON_HEIGHT + BUTTON_SPACING), BUTTON_WIDTH, BUTTON_HEIGHT),
     "exit": pygame.Rect(10, 1000 - EXIT_BUTTON_HEIGHT - 10, UI_BAR_WIDTH - 20, BUTTON_HEIGHT),  # Adjusted for screen height
 }
 
@@ -58,10 +58,10 @@ highlighted = {
     "torque": False,
     "mass": False,
     "edit": False,
-    "delete_nodes": False,
-    "delete_beams": False,
-    "delete_fixtures": False,
-    "delete_weights": False,
+    "delete": False,
+    "move": False,
+    "modify": False,
+    "clear": False,
 }
 
 checkbox_states = {
@@ -99,10 +99,10 @@ def draw_all_buttons(screen, font, small_font):
     draw_button(screen, buttons["torque"], "Torque", highlighted["torque"], font)
     draw_button(screen, buttons["mass"], "Mass", highlighted["mass"], font)
     draw_button(screen, buttons["edit"], "Edit", highlighted["edit"], font)
-    draw_button(screen, buttons["delete_nodes"], "Delete Nodes", highlighted["delete_nodes"], font)
-    draw_button(screen, buttons["delete_beams"], "Delete Beams", highlighted["delete_beams"], font)
-    draw_button(screen, buttons["delete_fixtures"], "Delete Fixtures", highlighted["delete_fixtures"], font)
-    draw_button(screen, buttons["delete_weights"], "Delete Weights", highlighted["delete_weights"], font)
+    draw_button(screen, buttons["delete"], "Delete", highlighted["delete"], font)
+    draw_button(screen, buttons["move"], "Move", highlighted["move"], font)
+    draw_button(screen, buttons["modify"], "Modify", highlighted["modify"], font)
+    draw_button(screen, buttons["clear"], "Clear", highlighted["clear"], font)
     draw_button(screen, buttons["exit"], "Exit", False, font)
     draw_label(screen, grid_labels["display"], "Display", font)  # Changed label to "Display"
     draw_checkbox(screen, checkboxes["1ft"], checkbox_states["1ft"])
