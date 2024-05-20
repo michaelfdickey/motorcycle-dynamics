@@ -27,6 +27,22 @@ def clear_all():
     fixtures = []
     masses = []
 
+def delete_all_nodes():
+    global nodes
+    nodes = []
+
+def delete_all_beams():
+    global beams
+    beams = []
+
+def delete_all_fixtures():
+    global fixtures
+    fixtures = []
+
+def delete_all_masses():
+    global masses
+    masses = []
+
 def main(screen):
     global nodes, beams, fixtures, masses, beam_start_node, mass_value, mass_input_active, confirmation_active
     global prompt_rect, yes_button, cancel_button
