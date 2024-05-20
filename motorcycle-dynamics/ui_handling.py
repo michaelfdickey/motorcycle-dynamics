@@ -87,7 +87,7 @@ def draw_ui(screen, nodes, beams):
 
 def draw_confirmation_prompt_in_ui_bar(screen):
     font = config.small_font
-    text = "Do you want to clear all entities?"
+    text = "Clear All Entities?"
     yes_rect = pygame.Rect(10, buttons["clear"].bottom + 20, 50, 30)
     no_rect = pygame.Rect(70, buttons["clear"].bottom + 20, 50, 30)
 
