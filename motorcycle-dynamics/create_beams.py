@@ -2,6 +2,7 @@
 
 import pygame
 import config
+import math
 
 def handle_beam_click(mouse_pos, nodes, beams, highlighted, beam_start_node):
     if highlighted["create"] and highlighted["beam"]:
@@ -19,7 +20,23 @@ def handle_beam_click(mouse_pos, nodes, beams, highlighted, beam_start_node):
 
 def draw_beams(screen, beams):
     for beam in beams:
-        pygame.draw.line(screen, config.WHITE, beam[0], beam[1], 2)
+        start, end = beam
+        # Calculate beam properties
+        dx = end[0] - start[0]
+        dy = end[1] - start[1]
+        length = math.sqrt(dx**2 + dy**2)
+        angle = math.degrees(math.atan2(dy, dx))
+        horizontal_length = abs(end[0] - start[0])
+        vertical_length = abs(end[1] - start[1])
+        
+        # Draw the beam
+        pygame.draw.line(screen, config.WHITE, start, end, 2)
+        
+        # Display beam properties
+        midpoint = ((start[0] + end[0]) / 2, (start[1] + end[1]) / 2)
+        display_text = f"{length:.2f}"
+        text_surface = config.small_font.render(display_text, True, config.WHITE)
+        screen.blit(text_surface, (midpoint[0] - text_surface.get_width() / 2, midpoint[1] + 10))
 
 def handle_beam_deletion(mouse_pos, beams):
     for beam in beams:
