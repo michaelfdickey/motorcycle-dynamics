@@ -38,7 +38,7 @@ buttons = {
 
 # Create labels and checkboxes for grid
 grid_labels = {
-    "grid": pygame.Rect(10, 650, UI_BAR_WIDTH - 20, BUTTON_HEIGHT),  # Grid label positioned above checkboxes
+    "display": pygame.Rect(10, 650, UI_BAR_WIDTH - 20, BUTTON_HEIGHT),  # Grid label positioned above checkboxes, changed to "Display"
     "1ft": pygame.Rect(40, 690, 50, CHECKBOX_SIZE),   # 1' grid label
     "1in": pygame.Rect(40, 720, 50, CHECKBOX_SIZE),   # 1" grid label
     "snap": pygame.Rect(40, 750, 50, CHECKBOX_SIZE),  # Snap label
@@ -104,10 +104,10 @@ def draw_all_buttons(screen, font, small_font):
     draw_button(screen, buttons["modify"], "Modify", highlighted["modify"], font)
     draw_button(screen, buttons["clear"], "Clear", highlighted["clear"], font)
     draw_button(screen, buttons["exit"], "Exit", False, font)
-    draw_label(screen, grid_labels["grid"], "Grid", font)
+    draw_label(screen, grid_labels["display"], "Display", font)  # Changed label to "Display"
     draw_checkbox(screen, checkboxes["1ft"], checkbox_states["1ft"])
-    draw_label(screen, grid_labels["1ft"], "1'", small_font)
+    draw_label(screen, grid_labels["1ft"], "1' Grid", small_font)  # Updated label to "1' Grid"
     draw_checkbox(screen, checkboxes["1in"], checkbox_states["1in"])
-    draw_label(screen, grid_labels["1in"], "1\"", small_font)
+    draw_label(screen, grid_labels["1in"], "1\" Grid", small_font)  # Updated label to "1\" Grid"
     draw_checkbox(screen, checkboxes["snap"], checkbox_states["snap"])
     draw_label(screen, grid_labels["snap"], "Snap", small_font)
