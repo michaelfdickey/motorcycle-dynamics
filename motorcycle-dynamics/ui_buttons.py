@@ -67,7 +67,7 @@ highlighted = {
 checkbox_states = {
     "1ft": True,   # 1' grid is visible by default
     "1in": False,  # 1" grid is not visible by default
-    "snap": False, # Snap is not enabled by default
+    "snap": True, # Snap is now enabled by default
 }
 
 selected_button_group = None
