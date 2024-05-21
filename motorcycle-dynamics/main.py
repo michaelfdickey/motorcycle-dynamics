@@ -77,7 +77,7 @@ def main(screen):
 
         draw_ui(screen, nodes, beams)
         draw_nodes(screen, nodes)
-        draw_beams(screen, beams)
+        draw_beams(screen, beams, nodes, fixtures, masses)
         draw_fixtures(screen, fixtures)
         draw_masses(screen, masses)
 
