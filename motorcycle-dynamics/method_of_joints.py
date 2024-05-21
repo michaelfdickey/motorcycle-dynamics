@@ -41,8 +41,8 @@ def calculate_joint_forces(nodes, beams, fixtures, weights):
             b.append(-joint_forces[i]["Fx"])
             b.append(-joint_forces[i]["Fy"])
 
-    A = np.array(A)
-    b = np.array(b)
+    A = np.atleast_2d(np.array(A))
+    b = np.atleast_2d(np.array(b)).T
 
     beam_forces = np.linalg.solve(A, b)
 
