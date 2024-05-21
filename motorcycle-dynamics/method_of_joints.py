@@ -2,7 +2,10 @@
 
 import numpy as np
 
-def calculate_joint_forces(nodes, beams):
+def calculate_joint_forces(nodes, beams, fixtures, weights):
+    """
+    Calculate forces on each beam based on fixtures, weights, angles, and lengths.
+    """
     joint_forces = {}
 
     for i, node in enumerate(nodes):
@@ -44,3 +47,16 @@ def calculate_joint_forces(nodes, beams):
     beam_forces = np.linalg.solve(A, b)
 
     return beam_forces
+
+def differentiate_forces(beam_forces):
+    """
+    Differentiate between tension and compression forces.
+    Positive values indicate tension, negative values indicate compression.
+    """
+    tension_compression = {}
+    for i, force in enumerate(beam_forces):
+        if force > 0:
+            tension_compression[i] = "Tension"
+        else:
+            tension_compression[i] = "Compression"
+    return tension_compression
