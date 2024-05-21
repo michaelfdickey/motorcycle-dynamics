@@ -3,6 +3,7 @@
 import pygame
 import config
 import math
+from method_of_joints import calculate_joint_forces, differentiate_forces
 
 def handle_beam_click(mouse_pos, nodes, beams, highlighted, beam_start_node):
     if highlighted["create"] and highlighted["beam"]:
@@ -18,8 +19,10 @@ def handle_beam_click(mouse_pos, nodes, beams, highlighted, beam_start_node):
                 break
     return beam_start_node
 
-def draw_beams(screen, beams):
-    for beam in beams:
+def draw_beams(screen, beams, nodes, fixtures, masses):
+    beam_forces = calculate_joint_forces(nodes, beams, fixtures, masses)
+    tension_compression = differentiate_forces(beam_forces)
+    for index, beam in enumerate(beams):
         start, end = beam
         # Calculate beam properties
         dx = end[0] - start[0]
@@ -34,9 +37,10 @@ def draw_beams(screen, beams):
         
         # Display beam properties
         midpoint = ((start[0] + end[0]) / 2, (start[1] + end[1]) / 2)
-        display_text = f"{length:.2f}"
+        force_type = "T" if tension_compression[index] == "Tension" else "C"
+        display_text = f"{force_type} {abs(beam_forces[index]):.2f}"
         text_surface = config.small_font.render(display_text, True, config.WHITE)
-        screen.blit(text_surface, (midpoint[0] - text_surface.get_width() / 2, midpoint[1] + 10))
+        screen.blit(text_surface, (midpoint[0] - text_surface.get_width() / 2, midpoint[1] - 20))
 
 def handle_beam_deletion(mouse_pos, beams):
     for beam in beams:
