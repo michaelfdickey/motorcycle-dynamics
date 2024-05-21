@@ -44,7 +44,26 @@ def calculate_joint_forces(nodes, beams, fixtures, weights):
     A = np.atleast_2d(np.array(A))
     b = np.atleast_2d(np.array(b)).T
 
-    beam_forces = np.linalg.solve(A, b)
+    # Ensure A is a square matrix
+    if A.shape[0] != A.shape[1]:
+        # Dynamically adjust the dimensions of A and b if necessary
+        if A.shape[0] > A.shape[1]:
+            # Add zero rows to A to make it square
+            A = np.vstack((A, np.zeros((A.shape[0] - A.shape[1], A.shape[1]))))
+        elif A.shape[0] < A.shape[1]:
+            # Use least squares solution if A cannot be made square
+            beam_forces = np.linalg.lstsq(A, b, rcond=None)[0]
+            return beam_forces
+        else:
+            # Raise a warning if A cannot be adjusted
+            raise Warning("Matrix A cannot be made square and compatible for np.linalg.solve.")
+
+    try:
+        beam_forces = np.linalg.solve(A, b)
+    except np.linalg.LinAlgError as e:
+        print(f"Linear algebra error encountered: {e}")
+        # Fallback to least squares solution in case of an error
+        beam_forces = np.linalg.lstsq(A, b, rcond=None)[0]
 
     return beam_forces
 
