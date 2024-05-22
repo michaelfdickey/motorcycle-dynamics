@@ -1,68 +1,72 @@
-# create_beams.py
-
 import pygame
 import config
 import math
-from method_of_joints import calculate_joint_forces, differentiate_forces
+from method_of_joints import calculate_joint_forces
+
+def draw_beams(screen, beams, nodes, fixtures, masses):
+    for beam in beams:
+        node1_idx, node2_idx = beam
+        node1, node2 = nodes[node1_idx], nodes[node2_idx]
+        pygame.draw.line(screen, config.BEAM_COLOR, node1, node2, 2)
+        draw_measurements(screen, node1, node2)
+
+    # Calculate joint forces and display them
+    beam_forces = calculate_joint_forces(nodes, beams, fixtures, masses)
+    if beam_forces is not None:
+        for i, force in enumerate(beam_forces):
+            beam = beams[i]
+            node1_idx, node2_idx = beam
+            node1, node2 = nodes[node1_idx], nodes[node2_idx]
+            mid_x, mid_y = (node1[0] + node2[0]) // 2, (node1[1] + node2[1]) // 2
+            font = pygame.font.SysFont(None, 18)
+            text_surface = font.render(f"{force:.2f}", True, config.BLACK)
+            screen.blit(text_surface, (mid_x, mid_y))
 
 def handle_beam_click(mouse_pos, nodes, beams, highlighted, beam_start_node):
     if highlighted["create"] and highlighted["beam"]:
-        for node in nodes:
-            if (node[0] - config.NODE_RADIUS <= mouse_pos[0] <= node[0] + config.NODE_RADIUS) and (
-                node[1] - config.NODE_RADIUS <= mouse_pos[1] <= node[1] + config.NODE_RADIUS
-            ):
+        for idx, node in enumerate(nodes):
+            if (node[0] - config.NODE_RADIUS <= mouse_pos[0] <= node[0] + config.NODE_RADIUS) and (node[1] - config.NODE_RADIUS <= mouse_pos[1] <= node[1] + config.NODE_RADIUS):
                 if beam_start_node is None:
-                    beam_start_node = node
+                    beam_start_node = idx
                 else:
-                    beams.append((beam_start_node, node))
+                    beams.append((beam_start_node, idx))
                     beam_start_node = None
-                break
     return beam_start_node
 
-def draw_beams(screen, beams, nodes, fixtures, masses):
-    beam_forces = calculate_joint_forces(nodes, beams, fixtures, masses)
-    tension_compression = differentiate_forces(beam_forces)
-    for index, beam in enumerate(beams):
-        start, end = beam
-        # Calculate beam properties
-        dx = end[0] - start[0]
-        dy = end[1] - start[1]
-        length = math.sqrt(dx**2 + dy**2)
-        angle = math.degrees(math.atan2(dy, dx))
-        horizontal_length = abs(end[0] - start[0])
-        vertical_length = abs(end[1] - start[1])
-        
-        # Draw the beam
-        pygame.draw.line(screen, config.WHITE, start, end, 2)
-        
-        # Display beam properties
-        midpoint = ((start[0] + end[0]) / 2, (start[1] + end[1]) / 2)
-        force_type = "T" if tension_compression[index] == "Tension" else "C"
-        display_text = f"{force_type} {abs(beam_forces[index]):.2f}"
-        text_surface = config.small_font.render(display_text, True, config.WHITE)
-        screen.blit(text_surface, (midpoint[0] - text_surface.get_width() / 2, midpoint[1] - 20))
+def draw_measurements(screen, node1, node2):
+    x1, y1 = node1
+    x2, y2 = node2
+    dx = x2 - x1
+    dy = y2 - y1
+    hypotenuse = math.sqrt(dx ** 2 + dy ** 2)
+    mid_x, mid_y = (x1 + x2) // 2, (y1 + y2) // 2
+    length_text = f"L: {hypotenuse:.1f}px"
+    font = pygame.font.SysFont(None, 18)
+    text_surface = font.render(length_text, True, config.TEXT_LENGTH_COLOR)
+    screen.blit(text_surface, (mid_x - text_surface.get_width() // 2, mid_y - text_surface.get_height() // 2))
 
 def handle_beam_deletion(mouse_pos, beams):
     for beam in beams:
-        start, end = beam
-        distance = point_to_segment_distance(mouse_pos, start, end)
-        if distance < config.NODE_RADIUS:
+        node1_idx, node2_idx = beam
+        node1, node2 = nodes[node1_idx], nodes[node2_idx]
+        if point_to_segment_distance(mouse_pos, node1, node2) < config.NODE_RADIUS:
             beams.remove(beam)
-            break
+            return True
+    return False
 
 def point_to_segment_distance(point, start, end):
-    # Calculate the distance from a point to a line segment
     px, py = point
     sx, sy = start
     ex, ey = end
-    line_mag = ((ex - sx) ** 2 + (ey - sy) ** 2) ** 0.5
-    if line_mag == 0:
-        return ((px - sx) ** 2 + (py - sy) ** 2) ** 0.5
+    line_mag = math.sqrt((ex - sx) ** 2 + (ey - sy) ** 2)
+    if line_mag < 0.000001:
+        return math.sqrt((px - sx) ** 2 + (py - sy) ** 2)
     u = ((px - sx) * (ex - sx) + (py - sy) * (ey - sy)) / (line_mag ** 2)
     if u < 0:
-        closest_point = (sx, sy)
+        ix, iy = sx, sy
     elif u > 1:
-        closest_point = (ex, ey)
+        ix, iy = ex, ey
     else:
-        closest_point = (sx + u * (ex - sx), sy + u * (ey - sy))
-    return ((px - closest_point[0]) ** 2 + (py - closest_point[1]) ** 2) ** 0.5
+        ix = sx + u * (ex - sx)
+        iy = sy + u * (ey - sy)
+    return math.sqrt((px - ix) ** 2 + (py - iy) ** 2)

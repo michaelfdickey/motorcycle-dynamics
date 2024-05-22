@@ -2,68 +2,39 @@
 
 import numpy as np
 
-def calculate_joint_forces(nodes, beams, fixtures, weights):
-    """
-    Calculate forces on each beam based on fixtures, weights, angles, and lengths.
-    """
-    joint_forces = {}
+def calculate_joint_forces(nodes, beams, fixtures, masses):
+    num_nodes = len(nodes)
+    num_beams = len(beams)
+    
+    A = np.zeros((2 * num_nodes, num_beams))
+    b = np.zeros(2 * num_nodes)
+    
+    # Populate the A matrix and b vector
+    for i, (node1_idx, node2_idx) in enumerate(beams):
+        x1, y1 = nodes[node1_idx]
+        x2, y2 = nodes[node2_idx]
+        length = np.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+        cos_theta = (x2 - x1) / length
+        sin_theta = (y2 - y1) / length
+        
+        # Node1 equations
+        A[2 * node1_idx, i] = cos_theta
+        A[2 * node1_idx + 1, i] = sin_theta
+        # Node2 equations
+        A[2 * node2_idx, i] = -cos_theta
+        A[2 * node2_idx + 1, i] = -sin_theta
+    
+    # Apply forces (assuming forces and masses are provided for all nodes)
+    for i, (fx, fy) in enumerate(masses):
+        b[2 * i] = fx
+        b[2 * i + 1] = fy
 
-    for i, node in enumerate(nodes):
-        Fx, Fy = node[2], node[3]
-        joint_forces[i] = {"Fx": Fx, "Fy": Fy, "beams": []}
-
-    for i, beam in enumerate(beams):
-        node1, node2 = beam[0], beam[1]
-        joint_forces[node1]["beams"].append(i)
-        joint_forces[node2]["beams"].append(i)
-
-    A = []
-    b = []
-
-    for i, node in enumerate(nodes):
-        if joint_forces[i]["Fx"] != 0 or joint_forces[i]["Fy"] != 0:
-            A_row1 = [0] * len(beams)
-            A_row2 = [0] * len(beams)
-            for beam_index in joint_forces[i]["beams"]:
-                beam = beams[beam_index]
-                node1, node2 = beam[0], beam[1]
-                x1, y1 = nodes[node1][0], nodes[node1][1]
-                x2, y2 = nodes[node2][0], nodes[node2][1]
-                length = np.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
-                if i == node1:
-                    A_row1[beam_index] = (x2 - x1) / length
-                    A_row2[beam_index] = (y2 - y1) / length
-                else:
-                    A_row1[beam_index] = (x1 - x2) / length
-                    A_row2[beam_index] = (y1 - y2) / length
-            A.append(A_row1)
-            A.append(A_row2)
-            b.append(-joint_forces[i]["Fx"])
-            b.append(-joint_forces[i]["Fy"])
-
-    A = np.atleast_2d(np.array(A))
-    b = np.atleast_2d(np.array(b)).T
-
-    # Ensure A is a square matrix
-    if A.shape[0] != A.shape[1]:
-        # Dynamically adjust the dimensions of A and b if necessary
-        if A.shape[0] > A.shape[1]:
-            # Add zero rows to A to make it square
-            A = np.vstack((A, np.zeros((A.shape[0] - A.shape[1], A.shape[1]))))
-        elif A.shape[0] < A.shape[1]:
-            # Use least squares solution if A cannot be made square
-            beam_forces = np.linalg.lstsq(A, b, rcond=None)[0]
-            return beam_forces
-        else:
-            # Raise a warning if A cannot be adjusted
-            raise Warning("Matrix A cannot be made square and compatible for np.linalg.solve.")
-
+    # Solve the system
     try:
-        beam_forces = np.linalg.solve(A, b)
-    except np.linalg.LinAlgError as e:
-        print(f"Linear algebra error encountered: {e}")
-        # Fallback to least squares solution in case of an error
         beam_forces = np.linalg.lstsq(A, b, rcond=None)[0]
+    except np.linalg.LinAlgError:
+        print("Incompatible dimensions in A and b")
+        return None
 
     return beam_forces
 
