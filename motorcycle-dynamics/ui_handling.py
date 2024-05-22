@@ -6,6 +6,8 @@ import config
 mass_input_active = False
 input_text = ""
 confirmation_active = False
+selected_button_group = None  # Initialize here
+
 
 highlighted = {
     "create": False,
@@ -22,7 +24,24 @@ highlighted = {
     "clear": False,
 }
 
+buttons = {
+    "create": pygame.Rect(10, 10, config.BUTTON_WIDTH, config.BUTTON_HEIGHT),
+    "edit": pygame.Rect(10, 60, config.BUTTON_WIDTH, config.BUTTON_HEIGHT),
+    "node": pygame.Rect(10, 110, config.BUTTON_WIDTH, config.BUTTON_HEIGHT),
+    "beam": pygame.Rect(10, 160, config.BUTTON_WIDTH, config.BUTTON_HEIGHT),
+    "fixture": pygame.Rect(10, 210, config.BUTTON_WIDTH, config.BUTTON_HEIGHT),
+    "force": pygame.Rect(10, 260, config.BUTTON_WIDTH, config.BUTTON_HEIGHT),
+    "torque": pygame.Rect(10, 310, config.BUTTON_WIDTH, config.BUTTON_HEIGHT),
+    "weight": pygame.Rect(10, 360, config.BUTTON_WIDTH, config.BUTTON_HEIGHT),
+    "delete": pygame.Rect(10, 410, config.BUTTON_WIDTH, config.BUTTON_HEIGHT),
+    "move": pygame.Rect(10, 460, config.BUTTON_WIDTH, config.BUTTON_HEIGHT),
+    "modify": pygame.Rect(10, 510, config.BUTTON_WIDTH, config.BUTTON_HEIGHT),
+    "clear": pygame.Rect(10, 560, config.BUTTON_WIDTH, config.BUTTON_HEIGHT),
+    "exit": pygame.Rect(10, config.SCREEN_HEIGHT - 40, config.BUTTON_WIDTH, config.BUTTON_HEIGHT),
+}
+
 def handle_button_click(mouse_pos):
+    global selected_button_group  # Declare it as global
     for key in buttons:
         if buttons[key].collidepoint(mouse_pos):
             if key == "exit":
