@@ -25,10 +25,6 @@ BEAM_COLOR = (255,255,255)
 TEXT_LENGTH_COLOR = (240,240,240)
 BEAM_TEXT_COLOR = (240,140,240)
 
-# UI
-BUTTON_WIDTH = 60  # Increased width for larger buttons
-BUTTON_HEIGHT = int(40 * 0.8)  # 20% shorter
-
 # Grid sizes
 FOOT_GRID_SIZE = 144
 INCH_GRID_SIZE = 12
@@ -40,10 +36,7 @@ current_grid_size = FOOT_GRID_SIZE  # Default grid size
 NODE_RADIUS = 5
 
 # Mass input rectangle
-# mass_input_rect = pygame.Rect(10, 25 + 4 * (40 * 0.8 + 10), 100, 40 * 0.8)
-
-# Weight input box
-weight_input_rect = pygame.Rect(10, 170, 100, 30)
+mass_input_rect = pygame.Rect(10, 25 + 4 * (40 * 0.8 + 10), 100, 40 * 0.8)
 
 # Fonts
 font = pygame.font.SysFont(None, 22)  # Reduced font size by 10%

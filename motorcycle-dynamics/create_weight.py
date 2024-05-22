@@ -1,27 +1,24 @@
 # create_weight.py
+
 import pygame
 import config
 
 def handle_weight_click(mouse_pos, nodes, weights, highlighted, weight_value):
     if highlighted["create"] and highlighted["weight"]:
-        for idx, node in enumerate(nodes):
+        for node in nodes:
             if (node[0] - config.NODE_RADIUS <= mouse_pos[0] <= node[0] + config.NODE_RADIUS) and (node[1] - config.NODE_RADIUS <= mouse_pos[1] <= node[1] + config.NODE_RADIUS):
-                weights.append((idx, weight_value))
+                weights.append((node[0], node[1], weight_value))
 
-def draw_weights(screen, weights, nodes):
+def draw_weights(screen, weights):
     for weight in weights:
-        node_idx, value = weight
-        x, y = nodes[node_idx]
-        font = pygame.font.SysFont(None, 18)
-        text_surface = font.render(f"{value} lbs", True, config.BLACK)
-        pygame.draw.polygon(screen, config.RED, [(x, y), (x - 10, y + 20), (x + 10, y + 20)])
-        screen.blit(text_surface, (x - text_surface.get_width() // 2, y + 25))
+        x, y, weight_value = weight
+        pygame.draw.polygon(screen, config.RED, [(x - 10, y + 10), (x + 10, y + 10), (x, y + 20)])
+        text_surface = config.small_font.render(f"{weight_value}", True, config.RED)
+        screen.blit(text_surface, (x - 10, y + 25))
 
-def handle_weight_deletion(mouse_pos, weights, nodes):
+def handle_weight_deletion(mouse_pos, weights):
     for weight in weights:
-        node_idx, _ = weight
-        x, y = nodes[node_idx]
-        if (x - config.NODE_RADIUS <= mouse_pos[0] <= x + config.NODE_RADIUS) and (y - config.NODE_RADIUS <= mouse_pos[1] <= y + config.NODE_RADIUS):
+        if (weight[0] - 10 <= mouse_pos[0] <= weight[0] + 10) and (weight[1] + 10 <= mouse_pos[1] <= weight[1] + 30):
             weights.remove(weight)
             return True
     return False
