@@ -73,7 +73,7 @@ checkbox_states = {
 selected_button_group = None
 
 def draw_button(screen, rect, text, is_highlighted, font):
-    color = LIGHT_GRAY if is_highlighted else WHITE
+    color = BRIGHT_YELLOW if is_highlighted else WHITE  # Change to visually indicate the active state
     pygame.draw.rect(screen, color, rect)
     pygame.draw.rect(screen, BLACK, rect, 2)
     label = font.render(text, True, BLACK)
