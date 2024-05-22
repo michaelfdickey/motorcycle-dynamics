@@ -41,7 +41,7 @@ buttons = {
 }
 
 def handle_button_click(mouse_pos):
-    global selected_button_group  # Declare it as global
+    global selected_button_group, confirmation_active  # Declare it as global
     for key in buttons:
         if buttons[key].collidepoint(mouse_pos):
             if key == "exit":
