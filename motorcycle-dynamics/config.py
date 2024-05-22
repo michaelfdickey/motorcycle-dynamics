@@ -23,10 +23,14 @@ FIXTURE_COLOR = BLUE
 RED = (255, 0, 0)
 BEAM_COLOR = (255,255,255)
 TEXT_LENGTH_COLOR = (240,240,240)
+BEAM_TEXT_COLOR = (240,140,240)
 
 # Grid sizes
 FOOT_GRID_SIZE = 144
 INCH_GRID_SIZE = 12
+
+# Grid settings
+current_grid_size = FOOT_GRID_SIZE  # Default grid size
 
 # Node radius
 NODE_RADIUS = 5

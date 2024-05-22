@@ -7,7 +7,7 @@ def draw_beams(screen, beams, nodes, fixtures, masses):
     for beam in beams:
         node1_idx, node2_idx = beam
         node1, node2 = nodes[node1_idx], nodes[node2_idx]
-        pygame.draw.line(screen, config.BEAM_COLOR, node1, node2, 2)
+        pygame.draw.line(screen, config.BEAM_COLOR, node1, node2, 2)  # Set beam color here
         draw_measurements(screen, node1, node2)
 
     # Calculate joint forces and display them
@@ -19,10 +19,10 @@ def draw_beams(screen, beams, nodes, fixtures, masses):
             node1, node2 = nodes[node1_idx], nodes[node2_idx]
             mid_x, mid_y = (node1[0] + node2[0]) // 2, (node1[1] + node2[1]) // 2
             font = pygame.font.SysFont(None, 18)
-            text_surface = font.render(f"{force:.2f}", True, config.BLACK)
+            text_surface = font.render(f"{force:.2f}", True, config.BEAM_TEXT_COLOR)  # Change to desired color
             screen.blit(text_surface, (mid_x, mid_y))
 
-def handle_beam_click(mouse_pos, nodes, beams, highlighted, beam_start_node):
+def handle_beam_click(mouse_pos, nodes, beams, highlighted, beam_start_node, grid_size):
     if highlighted["create"] and highlighted["beam"]:
         for idx, node in enumerate(nodes):
             if (node[0] - config.NODE_RADIUS <= mouse_pos[0] <= node[0] + config.NODE_RADIUS) and (node[1] - config.NODE_RADIUS <= mouse_pos[1] <= node[1] + config.NODE_RADIUS):
@@ -38,14 +38,22 @@ def draw_measurements(screen, node1, node2):
     x2, y2 = node2
     dx = x2 - x1
     dy = y2 - y1
-    hypotenuse = math.sqrt(dx ** 2 + dy ** 2)
-    mid_x, mid_y = (x1 + x2) // 2, (y1 + y2) // 2
-    length_text = f"L: {hypotenuse:.1f}px"
-    font = pygame.font.SysFont(None, 18)
-    text_surface = font.render(length_text, True, config.TEXT_LENGTH_COLOR)
-    screen.blit(text_surface, (mid_x - text_surface.get_width() // 2, mid_y - text_surface.get_height() // 2))
+    hypotenuse_pixels = math.sqrt(dx ** 2 + dy ** 2)
+    
+    # Assuming the grid size is in pixels and represents 1 foot or 1 inch
+    if config.current_grid_size == config.FOOT_GRID_SIZE:
+        hypotenuse_inches = hypotenuse_pixels / config.FOOT_GRID_SIZE * 12
+    else:  # config.current_grid_size == config.INCH_GRID_SIZE
+        hypotenuse_inches = hypotenuse_pixels / config.INCH_GRID_SIZE
 
-def handle_beam_deletion(mouse_pos, beams):
+    mid_x, mid_y = (x1 + x2) // 2, (y1 + y2) // 2
+    length_text = f"L: {hypotenuse_inches:.1f}\""
+    font = pygame.font.SysFont(None, 18)
+    text_surface = font.render(length_text, True, config.BEAM_TEXT_COLOR)  # Change to desired color
+    screen.blit(text_surface, (mid_x - text_surface.get_width() // 2, mid_y + 10))  # Adjust the y-coordinate
+
+
+def handle_beam_deletion(mouse_pos, beams, nodes):
     for beam in beams:
         node1_idx, node2_idx = beam
         node1, node2 = nodes[node1_idx], nodes[node2_idx]

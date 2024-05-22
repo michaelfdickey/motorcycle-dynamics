@@ -64,7 +64,8 @@ def main(screen):
                             grid_size = None
                         if highlighted["create"]:
                             handle_node_click(mouse_pos, nodes, highlighted, snap_to_grid, grid_size)
-                            beam_start_node = handle_beam_click(mouse_pos, nodes, beams, highlighted, beam_start_node)
+                            beam_start_node = handle_beam_click(mouse_pos, nodes, beams, highlighted, beam_start_node, config.current_grid_size)
+                            #beam_start_node = handle_beam_click(mouse_pos, nodes, beams, highlighted, beam_start_node)
                             handle_fixture_click(mouse_pos, nodes, fixtures, highlighted)
                             handle_mass_click(mouse_pos, nodes, masses, highlighted, mass_value)
                         elif highlighted["edit"] and highlighted["delete"]:
@@ -90,3 +91,13 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode((config.SCREEN_WIDTH, config.SCREEN_HEIGHT))
     pygame.display.set_caption('Motorcycle Designer')
     main(screen)
+
+
+"""
+if event.type == pygame.MOUSEBUTTONDOWN:
+    handle_button_click(mouse_pos)
+    beam_start_node = handle_beam_click(mouse_pos, nodes, beams, highlighted, beam_start_node, config.current_grid_size)
+    handle_node_click(mouse_pos, nodes, highlighted, snap_to_grid, grid_size)
+    handle_node_deletion(mouse_pos, nodes)
+    handle_beam_deletion(mouse_pos, beams, nodes)
+"""
