@@ -25,6 +25,10 @@ BEAM_COLOR = (255,255,255)
 TEXT_LENGTH_COLOR = (240,240,240)
 BEAM_TEXT_COLOR = (240,140,240)
 
+# UI
+BUTTON_WIDTH = 60  # Increased width for larger buttons
+BUTTON_HEIGHT = int(40 * 0.8)  # 20% shorter
+
 # Grid sizes
 FOOT_GRID_SIZE = 144
 INCH_GRID_SIZE = 12
