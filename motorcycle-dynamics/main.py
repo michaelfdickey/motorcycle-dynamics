@@ -10,6 +10,9 @@ from ui_handling import draw_ui, handle_button_click, handle_checkbox_click, han
 import config
 from config import FOOT_GRID_SIZE, INCH_GRID_SIZE  # Import the necessary constants
 from ui_buttons import highlighted, checkbox_states
+from create_weight import handle_weight_click, draw_weights, handle_weight_deletion
+from ui_handling import handle_button_click, handle_checkbox_click, handle_keydown_event, draw_ui
+
 
 nodes = []
 beams = []
@@ -73,6 +76,9 @@ def main(screen):
                                 if not handle_fixture_deletion(mouse_pos, fixtures):
                                     if not handle_node_deletion(mouse_pos, nodes):
                                         handle_beam_deletion(mouse_pos, beams)
+                                        if not handle_beam_deletion(mouse_pos, beams):
+                                            handle_weight_deletion(mouse_pos, weights, nodes)
+
             elif event.type == pygame.KEYDOWN and mass_input_active:
                 handle_keydown_event(event)
 

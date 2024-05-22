@@ -7,11 +7,24 @@ mass_input_active = False
 input_text = ""
 confirmation_active = False
 
+highlighted = {
+    "create": False,
+    "edit": False,
+    "node": False,
+    "beam": False,
+    "fixture": False,
+    "force": False,
+    "torque": False,
+    "weight": False,
+    "delete": False,
+    "move": False,
+    "modify": False,
+    "clear": False,
+}
+
 def handle_button_click(mouse_pos):
-    global highlighted, selected_button_group, confirmation_active
     for key in buttons:
         if buttons[key].collidepoint(mouse_pos):
-            print(f"Button {key} clicked")
             if key == "exit":
                 pygame.quit()
                 sys.exit()
@@ -29,27 +42,21 @@ def handle_button_click(mouse_pos):
                 if highlighted["edit"]:
                     highlighted["create"] = False
                     selected_button_group = "edit"
-                    for create_key in ["node", "beam", "fixture", "force", "torque", "mass"]:
+                    for create_key in ["node", "beam", "fixture", "force", "torque", "weight"]:
                         highlighted[create_key] = False
                 else:
                     selected_button_group = None
             elif key == "clear":
                 if selected_button_group == "edit":
                     confirmation_active = True
-                    print("Clear button clicked, confirmation_active set to True")
-            elif key in ["node", "beam", "fixture", "force", "torque", "mass"]:
+            elif key in ["node", "beam", "fixture", "force", "torque", "weight"]:
                 if selected_button_group == "create":
-                    for other_key in ["node", "beam", "fixture", "force", "torque", "mass"]:
+                    for other_key in ["node", "beam", "fixture", "force", "torque", "weight"]:
                         if other_key != key:
                             highlighted[other_key] = False
                     highlighted[key] = not highlighted[key]
-            elif key in ["delete", "move", "modify"]:
-                if selected_button_group == "edit":
-                    for other_key in ["delete", "move", "modify", "clear"]:
-                        if other_key != key:
-                            highlighted[other_key] = False
-                    highlighted[key] = not highlighted[key]
-            return
+                    if key == "weight":
+                        weight_input_active = highlighted[key]
 
 def handle_checkbox_click(mouse_pos):
     for key in checkboxes:
@@ -73,7 +80,7 @@ def draw_ui(screen, nodes, beams):
     
     draw_all_buttons(screen, font, small_font)
     
-    if highlighted["create"] and highlighted["mass"]:
+    if highlighted["create"] and highlighted["weight"]:
         pygame.draw.rect(screen, config.WHITE, config.mass_input_rect)
         pygame.draw.rect(screen, config.BLACK, config.mass_input_rect, 2)
         draw_label(screen, config.mass_input_rect, input_text, font)

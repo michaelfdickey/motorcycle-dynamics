@@ -36,7 +36,10 @@ current_grid_size = FOOT_GRID_SIZE  # Default grid size
 NODE_RADIUS = 5
 
 # Mass input rectangle
-mass_input_rect = pygame.Rect(10, 25 + 4 * (40 * 0.8 + 10), 100, 40 * 0.8)
+# mass_input_rect = pygame.Rect(10, 25 + 4 * (40 * 0.8 + 10), 100, 40 * 0.8)
+
+# Weight input box
+weight_input_rect = pygame.Rect(10, 170, 100, 30)
 
 # Fonts
 font = pygame.font.SysFont(None, 22)  # Reduced font size by 10%
